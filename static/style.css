@@ -1,0 +1,12 @@
+.progress-bar {
+    color: #333;
+}
+
+.achievement-left {
+    float: left;
+}
+
+.achievement-right {
+    position: absolute;
+    right: 20px;
+}

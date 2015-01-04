@@ -1,0 +1,41 @@
+{% extends "bootstrap/base_cdn.html" %}
+{% block title %}Journal{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block body %}
+<a href="{{ url_for('index') }}">Home</a>
+<div class="col-md-12">
+  <ol class="breadcrumb">
+    <li class="active">Summary</li>
+  </ol>
+</div>
+<div class="col-md-3">
+  {% for category in categories %}
+  <div>
+    <div class="btn-group">
+      <a class="btn btn-info" href="{{ url_for('category', category_id=category.id) }}">{{ category.name }}</a>
+      <button type="button" class="btn btn-info dropdown-toggle" data-toggle="collapse"
+              data-target="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
+        <span class="caret"></span>
+      </button>
+    </div>
+    <div class="collapse in" id="collapse{{ loop.index }}">
+      {% for achievement in category.achievements|rejectattr("completed") %}
+      <a class="btn btn-default btn-block" href="{{ url_for('achievement', achievement_id=achievement.id) }}">{{ achievement.heading }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="col-md-9">
+  {% block content %}
+  {% endblock %}
+</div>
+{% endblock %}
+
+{% block js_btm %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Journal{% endblock %}
+
+{% block body %}
+<h1>Journal</h1>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open
+  modal for @mdo
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open
+  modal for @fat
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+        data-whatever="@twbootstrap">Open modal for @twbootstrap
+</button>
+...more buttons...
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+      </div>
+      <form role="form" action="{{ url_for('add') }}" method="POST">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="heading" class="control-label">Recipient:</label>
+            <input type="text" class="form-control" id="heading" name="heading">
+          </div>
+          <div class="form-group">
+            <label for="body" class="control-label">Message:</label>
+            <textarea class="form-control" id="body" name="body"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Send message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  {{ super() }}
+
+  <div class="col-md-9">
+    <h4>Recent Achievements</h4>
+
+    {% for achievement in achievements %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h5 class="panel-title">{{ achievement.heading }}</h5>
+      </div>
+      <div class="panel-body">{{ achievement.body }}</div>
+    </div>
+    {% endfor %}
+
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+           aria-valuemax="100" style="width: 40%">
+        <span class="achievement-left">Achievements Earned</span>
+      </div>
+      <span class="achievement-right">{{ "%s/%s"|format(*(achievements|first).all_progress()) }}</span>
+    </div>
+    <div class="row">
+      {% for column in categories|slice(2) %}
+      <div class="col-md-6">
+        {% for category in column %}
+        <div class="progress">
+          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ category.progress_percent() }}"
+               aria-valuemin="0" aria-valuemax="100" style="width: {{ category.progress_percent() }}%">
+            <div class="achievement-left">{{ category.name }}</div>
+          </div>
+          <span class="achievement-right">{{ "%s/%s"|format(*category.progress()) }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
